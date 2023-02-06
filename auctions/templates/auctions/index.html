@@ -1,0 +1,33 @@
+
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+{% if not watchlist %}
+<form action="{% url 'commerce:displayCategory' %}" method="POST" class="my-3">
+    {% csrf_token %}
+    <label for="category" class="ml-5">Choose a category:</label>
+    <input type="hidden" id="end" name="end" for="end" value="{{ end }}">
+    <input type="hidden"  for="next" name="next" id="next"  value="{{ request.path }}">
+    <select name="category" id="category">
+        {% for cat in categories %}
+            <option value="{{ cat.kategorija }}">{{ cat.kategorija }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-warning">Select</button>
+</form>
+{% endif %}
+<div class="row mx-auto" style="width: 1000px;" >
+    {% for lol in aukcija %}
+    <div class="card ml-3 mt-3 shadow p-3 mb-5 bg-white rounded" style="width: 18rem;">
+        <img class="card-img-top" src="{{ lol.slika }}" alt="{{ lol.naslov }}"  width="200" height="200">
+            <div class="card-body">
+                <h5 class="card-title">{{ lol.naslov }}</h5>
+                <p class="card-text">{{ lol.opis }}</p>
+                <p class="card-text">Price: <strong>${{ lol.cena }}</strong></p>
+                <a href="{% url 'commerce:listing' lol.id %}" class="btn btn-primary align-bottom" >Details</a>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "auctions/layout.html" %}
+{% load crispy_forms_tags %}
+{% block body %}
+
+
+
+
+    <div class="col-md-6 text-center">
+        <h2 class="my-4">Add a new Listing</h2>
+    </div>
+
+
+    <form class="col-sm-10" name ="forma" enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+        {{ forma.naslov|as_crispy_field }}
+        </div>
+    </div>
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+        {{ forma.opis|as_crispy_field }}
+    </div>
+</div>
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+        {{ forma.kategorija|as_crispy_field }}
+    </div>
+</div>
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+        {{ forma.cena|as_crispy_field }}
+    </div>
+</div>
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+        {{ forma.slika|as_crispy_field }}
+
+        <input type="submit" class="btn btn-primary value="Submit" style="float: right;">
+        </div>
+        </div>
+    </form>
+{% endblock %}

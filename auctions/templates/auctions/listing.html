@@ -1,0 +1,120 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+
+{% load crispy_forms_tags %}
+<div>
+  <p class="ml-5">Category: {{ listing.kategorija }}
+  {% if user.is_authenticated %}
+    {% if not krajbiddinga %}
+      {% if owner %}
+        <form method="POST">
+          {% csrf_token %}
+          <input type="submit" class="ml-5 btn btn-danger" name="kraj" value="End bidding">
+        </form>
+
+      {% else %}
+      <h4>
+        <form method="POST">
+          {% csrf_token %}
+          <input type="submit" class="ml-5 btn btn-success" name="dugme" value="Watchlist">
+        </form>
+      </h4>
+
+      {% endif %}
+   {% endif %}
+
+  {% endif %}
+</p>
+</div>
+
+</div>
+<div class="card ml-5 mt-3 mr-5 shadow-lg p-3 mb-5 bg-white rounded" >
+  <div class="row justify-content-center">
+    <div class="col-5 text-center">
+      <h5 class="card-title">{{ listing.naslov }}</h5>
+      <img src="{{ listing.slika }}" class="card-img-top"  width="300" height="401" alt="{{ listing.naslov }}">
+      <div class="card-body">
+      </div>
+    </div>
+
+    <div class="col-5 my-5">
+      <div class="card-body text-center">
+          <div class="my-auto">
+          <p class="card-text ">
+
+            <row>Created by: {{ listing.user }}</row>
+            </p>
+           <p class="card-text "> <row>Description: {{ listing.opis }} - {% if krajbiddinga %}{% if topbidder %}- You've won the bidding! {% endif %} {% endif %}</p>
+          {% if not krajbiddinga %}
+            <row><h2>Current price: {{ listing.cena }} RSD </h2>
+          {% else %}
+            <row><h2>The bidding has ended at the {{ listing.cena }} RSD </h2>
+
+          {% endif %}
+
+        </div>
+        <div></div>
+        <p class="mt-5">
+          <div class="position-absolute bottom-0 start-50 translate-middle-x">
+          <form method="POST" action="{% url 'commerce:bids' listing.id %}">
+            {% csrf_token %}
+            {% if not krajbiddinga %}
+              {{ bid  }}
+              <input type="Submit" class="btn btn-primary" name="bid" value="Bid">
+            {% endif %}
+          </form>
+        </div>
+      </p>
+        </div>
+    </div>
+    </div>
+    </div>
+  <p class="align-bottom ml-5">Bid started: {{ listing.datum }}</p>
+</row>
+<div class="col-sm-12 ">
+  <div class="row ml-3">
+    <div class="col-0 ">
+      <div>
+        <form method="POST" action="{% url 'commerce:comment' listing.id %}">
+          {% csrf_token %}
+          {{ comment.komentar }}
+        <input type="submit" class="btn-secondary" name="kdugme" value="Submit">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<h3 class="ml-5">Comments:</h3>
+
+{% for comment in comments %}
+
+<section style="background-color: #FFF;">
+  <div class="container my-0 py-1">
+    <div class="row d-flex justify-content-left">
+      <div class="col-md-8 col-lg-10 col-xl-6">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex flex-start align-items-center">
+              <div>
+                <h6 class="fw-bold text-primary mb-1">{{ comment.user }}</h6>
+              </div>
+            </div>
+            <p class="mt-0 mb-0 pb-2">
+              {{ comment.komentar }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endfor %}
+
+
+
+
+
+
+{% endblock %}
